@@ -211,26 +211,9 @@
 
 .subscription-env-status {
     display: flex;
-    gap: 0.4rem;
-    margin-top: 0.35rem;
-}
-
-.env-status-badge {
-    font-size: 0.72rem;
-    font-weight: 600;
-    font-family: 'Monaco', 'Menlo', monospace;
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-}
-
-.env-status-badge.env-enabled {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.env-status-badge.env-disabled {
-    background: #f1f5f9;
-    color: #94a3b8;
+    gap: 1rem;
+    margin-top: 0.4rem;
+    align-items: center;
 }
 
 .subscription-detail-name {

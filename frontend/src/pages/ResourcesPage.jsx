@@ -307,12 +307,20 @@ const ResourcesPage = () => {
                                                                 <span className="subscriber-name">{sub.subscriber}</span>
                                                             </div>
                                                             <div className="subscription-env-status">
-                                                                <span className={`env-status-badge ${sub.prodEnabled ? 'env-enabled' : 'env-disabled'}`}>
-                                                                    prod: {sub.prodEnabled ? 'enabled' : 'disabled'}
-                                                                </span>
-                                                                <span className={`env-status-badge ${sub.testEnabled ? 'env-enabled' : 'env-disabled'}`}>
-                                                                    test: {sub.testEnabled ? 'enabled' : 'disabled'}
-                                                                </span>
+                                                                <div className="env-toggle-item">
+                                                                    <span className="env-toggle-label">Prod</span>
+                                                                    <label className="toggle-switch toggle-switch-readonly">
+                                                                        <input type="checkbox" checked={!!sub.prodEnabled} readOnly />
+                                                                        <span className="toggle-slider"></span>
+                                                                    </label>
+                                                                </div>
+                                                                <div className="env-toggle-item">
+                                                                    <span className="env-toggle-label">Test</span>
+                                                                    <label className="toggle-switch toggle-switch-readonly">
+                                                                        <input type="checkbox" checked={!!sub.testEnabled} readOnly />
+                                                                        <span className="toggle-slider"></span>
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     ))}

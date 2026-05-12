@@ -456,6 +456,87 @@
     color: #4a5568;
 }
 
+/* Toggle switch (iOS-style pill) */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    border-radius: 20px;
+    transition: background-color 0.2s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: #0d9488;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(16px);
+}
+
+.toggle-switch-readonly {
+    cursor: default;
+    pointer-events: none;
+}
+
+/* env-toggles used in add-subscription form */
+.env-toggles {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.env-toggles-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.env-toggle-status {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.env-on {
+    color: #0d9488;
+}
+
+.env-off {
+    color: #94a3b8;
+}
+
 .subscription-item-controls {
     display: flex;
     align-items: center;
