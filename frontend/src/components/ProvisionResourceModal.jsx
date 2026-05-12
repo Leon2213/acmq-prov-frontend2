@@ -37,6 +37,7 @@ const ProvisionResourceModal = ({
     });
     const [publisherType, setPublisherType] = useState('existing');
     const [topicNameWarning, setTopicNameWarning] = useState('');
+    const [showAddSubscriptionForm, setShowAddSubscriptionForm] = useState(false);
 
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -251,6 +252,7 @@ const ProvisionResourceModal = ({
         }));
         setNewSubscription({ name: '', subscriberType: 'existing', subscriber: '', nameManuallyEdited: false, prodEnabled: true, testEnabled: true });
         setErrors(prev => ({ ...prev, subscription: null }));
+        setShowAddSubscriptionForm(false);
     };
 
     const removeSubscription = (subscriptionName) => {
@@ -596,122 +598,144 @@ const ProvisionResourceModal = ({
                     </div>
                 )}
 
-                <div className="add-subscription-form">
-                    {/* Subscriber and Subscription side by side - aligned at bottom */}
-                    <div className="form-row-align-bottom">
-                        <div className="form-group input-with-toggle">
-                            <label className="form-label">Subscriber (Artemis-användare) *</label>
-                            <div className="user-type-toggle">
-                                <label className="user-type-option">
+                {showAddSubscriptionForm ? (
+                    <div className="add-subscription-form">
+                        <div className="form-row-align-bottom">
+                            <div className="form-group input-with-toggle">
+                                <label className="form-label">Subscriber (Artemis-användare) *</label>
+                                <div className="user-type-toggle">
+                                    <label className="user-type-option">
+                                        <input
+                                            type="radio"
+                                            checked={newSubscription.subscriberType === 'existing'}
+                                            onChange={() => setNewSubscription(prev => ({
+                                                ...prev,
+                                                subscriberType: 'existing',
+                                                subscriber: '',
+                                                name: '',
+                                                nameManuallyEdited: false
+                                            }))}
+                                        />
+                                        Befintlig
+                                    </label>
+                                    <label className="user-type-option">
+                                        <input
+                                            type="radio"
+                                            checked={newSubscription.subscriberType === 'new'}
+                                            onChange={() => setNewSubscription(prev => ({
+                                                ...prev,
+                                                subscriberType: 'new',
+                                                subscriber: '',
+                                                name: '',
+                                                nameManuallyEdited: false
+                                            }))}
+                                        />
+                                        Ny användare
+                                    </label>
+                                </div>
+                                {newSubscription.subscriberType === 'existing' ? (
+                                    <select
+                                        className="form-control form-select"
+                                        value={newSubscription.subscriber}
+                                        onChange={(e) => handleSubscriberChange(e.target.value)}
+                                        disabled={loadingUsers}
+                                    >
+                                        <option value="">{loadingUsers ? 'Laddar...' : '-- Välj subscriber --'}</option>
+                                        {availableUsers.map((user) => (
+                                            <option key={user.id} value={user.name}>
+                                                {user.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
                                     <input
-                                        type="radio"
-                                        checked={newSubscription.subscriberType === 'existing'}
-                                        onChange={() => setNewSubscription(prev => ({
-                                            ...prev,
-                                            subscriberType: 'existing',
-                                            subscriber: '',
-                                            name: '',
-                                            nameManuallyEdited: false
-                                        }))}
+                                        type="text"
+                                        className="form-control"
+                                        value={newSubscription.subscriber}
+                                        onChange={(e) => handleSubscriberChange(e.target.value)}
+                                        placeholder="Nytt användarnamn"
                                     />
-                                    Befintlig
-                                </label>
-                                <label className="user-type-option">
-                                    <input
-                                        type="radio"
-                                        checked={newSubscription.subscriberType === 'new'}
-                                        onChange={() => setNewSubscription(prev => ({
-                                            ...prev,
-                                            subscriberType: 'new',
-                                            subscriber: '',
-                                            name: '',
-                                            nameManuallyEdited: false
-                                        }))}
-                                    />
-                                    Ny användare
-                                </label>
+                                )}
                             </div>
 
-                            {newSubscription.subscriberType === 'existing' ? (
-                                <select
-                                    className="form-control form-select"
-                                    value={newSubscription.subscriber}
-                                    onChange={(e) => handleSubscriberChange(e.target.value)}
-                                    disabled={loadingUsers}
-                                >
-                                    <option value="">{loadingUsers ? 'Laddar...' : '-- Välj subscriber --'}</option>
-                                    {availableUsers.map((user) => (
-                                        <option key={user.id} value={user.name}>
-                                            {user.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            ) : (
+                            <div className="form-group input-with-toggle">
+                                <label className="form-label">Subscription-namn *</label>
+                                {topicNameWarning && (
+                                    <div className="field-hint warning">Fyll i manuellt (namnkonvention ej följd)</div>
+                                )}
+                                {!topicNameWarning && newSubscription.subscriber && (
+                                    <div className="field-hint">Genererat automatiskt - kan redigeras</div>
+                                )}
                                 <input
                                     type="text"
                                     className="form-control"
-                                    value={newSubscription.subscriber}
-                                    onChange={(e) => handleSubscriberChange(e.target.value)}
-                                    placeholder="Nytt användarnamn"
+                                    value={newSubscription.name}
+                                    onChange={handleSubscriptionNameChange}
+                                    placeholder={topicNameWarning ? "Fyll i subscription-namn manuellt" : "Genereras automatiskt..."}
                                 />
-                            )}
+                            </div>
                         </div>
 
-                        <div className="form-group input-with-toggle">
-                            <label className="form-label">Subscription-namn *</label>
-                            {topicNameWarning && (
-                                <div className="field-hint warning">Fyll i manuellt (namnkonvention ej följd)</div>
-                            )}
-                            {!topicNameWarning && newSubscription.subscriber && (
-                                <div className="field-hint">Genererat automatiskt - kan redigeras</div>
-                            )}
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={newSubscription.name}
-                                onChange={handleSubscriptionNameChange}
-                                placeholder={topicNameWarning ? "Fyll i subscription-namn manuellt" : "Genereras automatiskt..."}
-                            />
+                        <div className="env-toggles">
+                            <span className="env-toggles-label">Aktivera i miljö:</span>
+                            <div className="env-toggle-item">
+                                <span className="env-toggle-label">Prod</span>
+                                <label className="toggle-switch">
+                                    <input
+                                        type="checkbox"
+                                        checked={newSubscription.prodEnabled}
+                                        onChange={(e) => setNewSubscription(prev => ({ ...prev, prodEnabled: e.target.checked }))}
+                                    />
+                                    <span className="toggle-slider"></span>
+                                </label>
+                                <span className={`env-toggle-status ${newSubscription.prodEnabled ? 'env-on' : 'env-off'}`}>
+                                    {newSubscription.prodEnabled ? 'Enabled' : 'Disabled'}
+                                </span>
+                            </div>
+                            <div className="env-toggle-item">
+                                <span className="env-toggle-label">Test</span>
+                                <label className="toggle-switch">
+                                    <input
+                                        type="checkbox"
+                                        checked={newSubscription.testEnabled}
+                                        onChange={(e) => setNewSubscription(prev => ({ ...prev, testEnabled: e.target.checked }))}
+                                    />
+                                    <span className="toggle-slider"></span>
+                                </label>
+                                <span className={`env-toggle-status ${newSubscription.testEnabled ? 'env-on' : 'env-off'}`}>
+                                    {newSubscription.testEnabled ? 'Enabled' : 'Disabled'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {errors.subscription && <span className="error-text">{errors.subscription}</span>}
+
+                        <div className="add-subscription-form-actions">
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                    setShowAddSubscriptionForm(false);
+                                    setNewSubscription({ name: '', subscriberType: 'existing', subscriber: '', nameManuallyEdited: false, prodEnabled: true, testEnabled: true });
+                                    setErrors(prev => ({ ...prev, subscription: null }));
+                                }}
+                            >
+                                Avbryt
+                            </button>
+                            <button type="button" className="btn btn-success" onClick={addSubscription}>
+                                + Lägg till subscription
+                            </button>
                         </div>
                     </div>
-
-                    <div className="env-toggles">
-                        <span className="env-toggles-label">Aktivera i miljö:</span>
-                        <div className="env-toggle-item">
-                            <span className="env-toggle-label">Prod</span>
-                            <label className="toggle-switch">
-                                <input
-                                    type="checkbox"
-                                    checked={newSubscription.prodEnabled}
-                                    onChange={(e) => setNewSubscription(prev => ({ ...prev, prodEnabled: e.target.checked }))}
-                                />
-                                <span className="toggle-slider"></span>
-                            </label>
-                            <span className={`env-toggle-status ${newSubscription.prodEnabled ? 'env-on' : 'env-off'}`}>
-                                {newSubscription.prodEnabled ? 'Enabled' : 'Disabled'}
-                            </span>
-                        </div>
-                        <div className="env-toggle-item">
-                            <span className="env-toggle-label">Test</span>
-                            <label className="toggle-switch">
-                                <input
-                                    type="checkbox"
-                                    checked={newSubscription.testEnabled}
-                                    onChange={(e) => setNewSubscription(prev => ({ ...prev, testEnabled: e.target.checked }))}
-                                />
-                                <span className="toggle-slider"></span>
-                            </label>
-                            <span className={`env-toggle-status ${newSubscription.testEnabled ? 'env-on' : 'env-off'}`}>
-                                {newSubscription.testEnabled ? 'Enabled' : 'Disabled'}
-                            </span>
-                        </div>
-                    </div>
-
-                    <button type="button" className="btn btn-success" onClick={addSubscription}>
-                        + Lägg till subscription
+                ) : (
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setShowAddSubscriptionForm(true)}
+                    >
+                        + Ny subscription
                     </button>
-                    {errors.subscription && <span className="error-text">{errors.subscription}</span>}
-                </div>
+                )}
             </div>
         </>
     );
