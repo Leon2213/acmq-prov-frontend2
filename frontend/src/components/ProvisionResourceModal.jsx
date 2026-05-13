@@ -38,6 +38,7 @@ const ProvisionResourceModal = ({
     const [publisherType, setPublisherType] = useState('existing');
     const [topicNameWarning, setTopicNameWarning] = useState('');
     const [showAddSubscriptionForm, setShowAddSubscriptionForm] = useState(false);
+    const [confirmDeleteSub, setConfirmDeleteSub] = useState(null);
 
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -540,60 +541,72 @@ const ProvisionResourceModal = ({
                     <div className="subscriptions-list">
                         {formData.subscriptions.map((sub) => (
                             <div key={sub.name} className="subscription-item">
-                                <div className="subscription-info">
-                                    <span className="badge badge-subscriber">SUB</span>
-                                    <div className="subscription-details">
-                                        <span className="subscription-name">{sub.name}</span>
-                                        <span className="subscription-subscriber">
-                                            Subscriber: <strong>{sub.subscriber}</strong>
-                                            {sub.isNew && <span className="new-indicator">(ny användare)</span>}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="subscription-item-controls">
-                                    <div className="env-toggles-inline">
-                                        <div className="env-toggle-item">
-                                            <span className="env-toggle-label">Prod</span>
-                                            <label className="toggle-switch">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={sub.prodEnabled}
-                                                    onChange={(e) => setFormData(prev => ({
-                                                        ...prev,
-                                                        subscriptions: prev.subscriptions.map(s =>
-                                                            s.name === sub.name ? { ...s, prodEnabled: e.target.checked } : s
-                                                        )
-                                                    }))}
-                                                />
-                                                <span className="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                        <div className="env-toggle-item">
-                                            <span className="env-toggle-label">Test</span>
-                                            <label className="toggle-switch">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={sub.testEnabled}
-                                                    onChange={(e) => setFormData(prev => ({
-                                                        ...prev,
-                                                        subscriptions: prev.subscriptions.map(s =>
-                                                            s.name === sub.name ? { ...s, testEnabled: e.target.checked } : s
-                                                        )
-                                                    }))}
-                                                />
-                                                <span className="toggle-slider"></span>
-                                            </label>
+                                <button
+                                    type="button"
+                                    className="subscription-delete-btn"
+                                    onClick={() => setConfirmDeleteSub(sub.name)}
+                                    title="Ta bort subscription"
+                                >
+                                    &times;
+                                </button>
+                                {confirmDeleteSub === sub.name ? (
+                                    <div className="subscription-confirm-delete">
+                                        <span className="subscription-confirm-text">Vill du ta bort denna subscription?</span>
+                                        <div className="subscription-confirm-actions">
+                                            <button type="button" className="btn btn-sm btn-secondary" onClick={() => setConfirmDeleteSub(null)}>Avbryt</button>
+                                            <button type="button" className="btn btn-sm btn-danger" onClick={() => { removeSubscription(sub.name); setConfirmDeleteSub(null); }}>Ta bort</button>
                                         </div>
                                     </div>
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm btn-danger"
-                                        onClick={() => removeSubscription(sub.name)}
-                                    >
-                                        Ta bort
-                                    </button>
-                                </div>
-                            </div>
+                                ) : (
+                                    <>
+                                        <div className="subscription-info">
+                                            <span className="badge badge-subscriber">SUB</span>
+                                            <div className="subscription-details">
+                                                <span className="subscription-name">{sub.name}</span>
+                                                <span className="subscription-subscriber">
+                                                    Subscriber: <strong>{sub.subscriber}</strong>
+                                                    {sub.isNew && <span className="new-indicator">(ny användare)</span>}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="subscription-item-controls">
+                                            <div className="env-toggles-inline">
+                                                <div className="env-toggle-item">
+                                                    <span className="env-toggle-label">Prod</span>
+                                                    <label className="toggle-switch">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={sub.prodEnabled}
+                                                            onChange={(e) => setFormData(prev => ({
+                                                                ...prev,
+                                                                subscriptions: prev.subscriptions.map(s =>
+                                                                    s.name === sub.name ? { ...s, prodEnabled: e.target.checked } : s
+                                                                )
+                                                            }))}
+                                                        />
+                                                        <span className="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                                <div className="env-toggle-item">
+                                                    <span className="env-toggle-label">Test</span>
+                                                    <label className="toggle-switch">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={sub.testEnabled}
+                                                            onChange={(e) => setFormData(prev => ({
+                                                                ...prev,
+                                                                subscriptions: prev.subscriptions.map(s =>
+                                                                    s.name === sub.name ? { ...s, testEnabled: e.target.checked } : s
+                                                                )
+                                                            }))}
+                                                        />
+                                                        <span className="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                         ))}
                     </div>
                 )}

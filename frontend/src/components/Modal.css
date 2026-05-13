@@ -431,10 +431,11 @@
 }
 
 .subscription-item {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 2rem 0.75rem 1rem;
     background: white;
     border-bottom: 2px solid #e2e8f0;
 }
@@ -553,6 +554,44 @@
 
 .env-off {
     color: #94a3b8;
+}
+
+.subscription-delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+
+.subscription-delete-btn:hover {
+    color: #ef4444;
+    background: #fee2e2;
+}
+
+.subscription-confirm-delete {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.25rem 1.5rem 0.25rem 0;
+    width: 100%;
+}
+
+.subscription-confirm-text {
+    font-size: 0.85rem;
+    color: #374151;
+}
+
+.subscription-confirm-actions {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .subscription-item-controls {
