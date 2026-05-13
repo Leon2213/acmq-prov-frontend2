@@ -307,11 +307,11 @@ const ResourcesPage = () => {
                                                                 <span className="subscriber-name">{sub.subscriber}</span>
                                                             </div>
                                                             <div className="subscription-env-status">
-                                                                <span className={`badge ${sub.prodEnabled ? 'badge-env-enabled' : 'badge-env-disabled'}`}>
-                                                                    Prod: {sub.prodEnabled ? 'Enabled' : 'Disabled'}
+                                                                <span className={`env-indicator ${sub.prodEnabled ? 'env-indicator-on' : 'env-indicator-off'}`}>
+                                                                    <span className="env-indicator-dot"></span>Prod
                                                                 </span>
-                                                                <span className={`badge ${sub.testEnabled ? 'badge-env-enabled' : 'badge-env-disabled'}`}>
-                                                                    Test: {sub.testEnabled ? 'Enabled' : 'Disabled'}
+                                                                <span className={`env-indicator ${sub.testEnabled ? 'env-indicator-on' : 'env-indicator-off'}`}>
+                                                                    <span className="env-indicator-dot"></span>Test
                                                                 </span>
                                                             </div>
                                                         </div>
