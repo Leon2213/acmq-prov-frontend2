@@ -211,9 +211,21 @@
 
 .subscription-env-status {
     display: flex;
-    gap: 1rem;
+    gap: 0.4rem;
     margin-top: 0.4rem;
     align-items: center;
+}
+
+.badge-env-enabled {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+.badge-env-disabled {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    color: #94a3b8;
+    border: 1px solid #cbd5e1;
 }
 
 .subscription-detail-name {

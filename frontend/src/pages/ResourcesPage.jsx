@@ -307,20 +307,12 @@ const ResourcesPage = () => {
                                                                 <span className="subscriber-name">{sub.subscriber}</span>
                                                             </div>
                                                             <div className="subscription-env-status">
-                                                                <div className="env-toggle-item">
-                                                                    <span className="env-toggle-label">Prod</span>
-                                                                    <label className="toggle-switch toggle-switch-readonly">
-                                                                        <input type="checkbox" checked={!!sub.prodEnabled} readOnly />
-                                                                        <span className="toggle-slider"></span>
-                                                                    </label>
-                                                                </div>
-                                                                <div className="env-toggle-item">
-                                                                    <span className="env-toggle-label">Test</span>
-                                                                    <label className="toggle-switch toggle-switch-readonly">
-                                                                        <input type="checkbox" checked={!!sub.testEnabled} readOnly />
-                                                                        <span className="toggle-slider"></span>
-                                                                    </label>
-                                                                </div>
+                                                                <span className={`badge ${sub.prodEnabled ? 'badge-env-enabled' : 'badge-env-disabled'}`}>
+                                                                    Prod: {sub.prodEnabled ? 'Enabled' : 'Disabled'}
+                                                                </span>
+                                                                <span className={`badge ${sub.testEnabled ? 'badge-env-enabled' : 'badge-env-disabled'}`}>
+                                                                    Test: {sub.testEnabled ? 'Enabled' : 'Disabled'}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     ))}
