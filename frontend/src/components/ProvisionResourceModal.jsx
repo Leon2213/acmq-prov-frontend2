@@ -607,6 +607,7 @@ const ProvisionResourceModal = ({
                                         </div>
                                     </>
                                 )}
+                            </div>
                         ))}
                     </div>
                 )}
