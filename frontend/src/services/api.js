@@ -317,6 +317,20 @@ export const api = {
         const response = await fetch('/api/refresh', { method: 'POST' });
         if (!response.ok) throw new Error('Refresh misslyckades');
         return response.json();
+    },
+
+    async getAppInfo() {
+        if (USE_MOCK) {
+            await delay(100);
+            return { version: '1.0.0-SNAPSHOT', buildTime: new Date().toISOString() };
+        }
+        try {
+            const response = await fetch('/api/info');
+            if (!response.ok) return null;
+            return response.json();
+        } catch {
+            return null;
+        }
     }
 };
 

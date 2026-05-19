@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { api } from '../services/api';
 import './Layout.css';
 
 const Layout = () => {
+    const [appInfo, setAppInfo] = useState(null);
+
+    useEffect(() => {
+        api.getAppInfo().then(setAppInfo).catch(() => {});
+    }, []);
+
     return (
         <div className="layout">
             <header className="layout-header">
@@ -24,6 +31,9 @@ const Layout = () => {
             </main>
             <footer className="layout-footer">
                 <p>ActiveMQ Artemis Provisioning Portal</p>
+                {appInfo?.version && (
+                    <span className="footer-version">v{appInfo.version}</span>
+                )}
             </footer>
         </div>
     );
